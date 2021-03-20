@@ -1,13 +1,19 @@
 package com.divya.schoolservice.service;
 
 import com.divya.schoolservice.entities.School;
+import com.divya.schoolservice.entities.Teacher;
 import com.divya.schoolservice.exception.NotFound;
 import com.divya.schoolservice.model.SchoolModel;
+import com.divya.schoolservice.model.TeacherModel;
 import com.divya.schoolservice.repository.SchoolRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,7 +39,19 @@ public class SchoolServiceImpl implements SchoolService {
 
         if (byId.isPresent()) {
             SchoolModel schoolModel = new SchoolModel();
-            BeanUtils.copyProperties(byId.get(), schoolModel);
+            School school = byId.get();
+            BeanUtils.copyProperties(school, schoolModel);
+//            if (school.getTeachers() != null && school.getTeachers().size() > 0) {
+            if(!CollectionUtils.isEmpty(school.getTeachers())){
+                List<TeacherModel> teacherModels = new ArrayList<>();
+                for (Teacher teacher : school.getTeachers()) {
+                    TeacherModel teacherModel = new TeacherModel();
+                    BeanUtils.copyProperties(teacher, teacherModel);
+                    teacherModels.add(teacherModel);
+                }
+
+                schoolModel.setTeacherModels(teacherModels);
+            }
             return schoolModel;
         }
 
