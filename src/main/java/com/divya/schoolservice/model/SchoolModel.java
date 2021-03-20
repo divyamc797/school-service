@@ -1,15 +1,30 @@
 package com.divya.schoolservice.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.List;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SchoolModel {
-    private Long id;
+    private long id;
     private String name;
     private String address;
 
-    public Long getId() {
+    private List<TeacherModel> teacherModels;
+
+    public List<TeacherModel> getTeacherModels() {
+        return teacherModels;
+    }
+
+    public void setTeacherModels(List<TeacherModel> teacherModels) {
+        this.teacherModels = teacherModels;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

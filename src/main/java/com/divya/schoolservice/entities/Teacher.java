@@ -1,18 +1,17 @@
 package com.divya.schoolservice.entities;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-public class School {
+public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
     private String address;
-    @OneToMany(mappedBy = "school", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
-    private List<Teacher> teachers;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "school_id", nullable = false)
+    private School school;
 
     public long getId() {
         return id;
@@ -38,12 +37,11 @@ public class School {
         this.address = address;
     }
 
-    public List<Teacher> getTeachers() {
-        return teachers;
+    public School getSchool() {
+        return school;
     }
 
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
+    public void setSchool(School school) {
+        this.school = school;
     }
-
 }
