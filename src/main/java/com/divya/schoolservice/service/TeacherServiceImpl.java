@@ -23,7 +23,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public TeacherModel createTeacher(TeacherModel teacherModel) throws NotFound {
-
         Optional<School> optionalSchool = schoolRepo.findById(teacherModel.getSchoolId());
         if (optionalSchool.isPresent()) {
             Teacher teacher = new Teacher();

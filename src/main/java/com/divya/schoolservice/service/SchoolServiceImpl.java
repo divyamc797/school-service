@@ -43,25 +43,8 @@ public class SchoolServiceImpl implements SchoolService {
             School school = byId.get();
             BeanUtils.copyProperties(school, schoolModel);
 //            if (school.getTeachers() != null && school.getTeachers().size() > 0) {
-            if (!CollectionUtils.isEmpty(school.getTeachers())) {
-                List<TeacherModel> teacherModels = new ArrayList<>();
-                for (Teacher teacher : school.getTeachers()) {
-                    TeacherModel teacherModel = new TeacherModel();
-                    BeanUtils.copyProperties(teacher, teacherModel);
-                    teacherModels.add(teacherModel);
-                }
-                schoolModel.setTeacherModels(teacherModels);
-            }
-
-            if (school.getStudents() != null && school.getStudents().size() > 0) {
-                List<StudentModel> studentModels = new ArrayList<>();
-                for (Student student : school.getStudents()) {
-                    StudentModel studentModel = new StudentModel();
-                    BeanUtils.copyProperties(student, studentModel);
-                    studentModels.add(studentModel);
-                }
-                schoolModel.setStudentModels(studentModels);
-            }
+            this.populateTeachers(schoolModel, school);
+            this.populateStudents(schoolModel, school);
             return schoolModel;
         }
 
@@ -77,8 +60,34 @@ public class SchoolServiceImpl implements SchoolService {
         }
 
         SchoolModel schoolModel = new SchoolModel();
-        BeanUtils.copyProperties(byName.get(), schoolModel);
+        final School school = byName.get();
+        BeanUtils.copyProperties(school, schoolModel);
+        this.populateTeachers(schoolModel, school);
+        this.populateStudents(schoolModel, school);
         return schoolModel;
     }
 
+    private void populateStudents(SchoolModel schoolModel, School school) {
+        if (school.getStudents() != null && school.getStudents().size() > 0) {
+            List<StudentModel> studentModels = new ArrayList<>();
+            for (Student student : school.getStudents()) {
+                StudentModel studentModel = new StudentModel();
+                BeanUtils.copyProperties(student, studentModel);
+                studentModels.add(studentModel);
+            }
+            schoolModel.setStudentModels(studentModels);
+        }
+    }
+
+    private void populateTeachers(SchoolModel schoolModel, School school) {
+        if (!CollectionUtils.isEmpty(school.getTeachers())) {
+            List<TeacherModel> teacherModels = new ArrayList<>();
+            for (Teacher teacher : school.getTeachers()) {
+                TeacherModel teacherModel = new TeacherModel();
+                BeanUtils.copyProperties(teacher, teacherModel);
+                teacherModels.add(teacherModel);
+            }
+            schoolModel.setTeacherModels(teacherModels);
+        }
+    }
 }
