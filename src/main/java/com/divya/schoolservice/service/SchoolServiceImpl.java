@@ -1,9 +1,11 @@
 package com.divya.schoolservice.service;
 
 import com.divya.schoolservice.entities.School;
+import com.divya.schoolservice.entities.Student;
 import com.divya.schoolservice.entities.Teacher;
 import com.divya.schoolservice.exception.NotFound;
 import com.divya.schoolservice.model.SchoolModel;
+import com.divya.schoolservice.model.StudentModel;
 import com.divya.schoolservice.model.TeacherModel;
 import com.divya.schoolservice.repository.SchoolRepo;
 import org.springframework.beans.BeanUtils;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,15 +43,24 @@ public class SchoolServiceImpl implements SchoolService {
             School school = byId.get();
             BeanUtils.copyProperties(school, schoolModel);
 //            if (school.getTeachers() != null && school.getTeachers().size() > 0) {
-            if(!CollectionUtils.isEmpty(school.getTeachers())){
+            if (!CollectionUtils.isEmpty(school.getTeachers())) {
                 List<TeacherModel> teacherModels = new ArrayList<>();
                 for (Teacher teacher : school.getTeachers()) {
                     TeacherModel teacherModel = new TeacherModel();
                     BeanUtils.copyProperties(teacher, teacherModel);
                     teacherModels.add(teacherModel);
                 }
-
                 schoolModel.setTeacherModels(teacherModels);
+            }
+
+            if (school.getStudents() != null && school.getStudents().size() > 0) {
+                List<StudentModel> studentModels = new ArrayList<>();
+                for (Student student : school.getStudents()) {
+                    StudentModel studentModel = new StudentModel();
+                    BeanUtils.copyProperties(student, studentModel);
+                    studentModels.add(studentModel);
+                }
+                schoolModel.setStudentModels(studentModels);
             }
             return schoolModel;
         }
