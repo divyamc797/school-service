@@ -9,8 +9,16 @@ public class SchoolModel {
     private long id;
     private String name;
     private String address;
-
     private List<TeacherModel> teacherModels;
+    private List<StudentModel> studentModels;
+
+    public List<StudentModel> getStudentModels() {
+        return studentModels;
+    }
+
+    public void setStudentModels(List<StudentModel> studentModels) {
+        this.studentModels = studentModels;
+    }
 
     public List<TeacherModel> getTeacherModels() {
         return teacherModels;
