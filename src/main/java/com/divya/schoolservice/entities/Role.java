@@ -1,5 +1,9 @@
 package com.divya.schoolservice.entities;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class Role {
@@ -15,6 +20,8 @@ public class Role {
     private long id;
     private String role;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
