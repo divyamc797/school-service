@@ -4,7 +4,6 @@ import com.divya.schoolservice.entities.User;
 import com.divya.schoolservice.helpers.JwtTokenUtil;
 import com.divya.schoolservice.model.JwtRequest;
 import com.divya.schoolservice.model.JwtResponse;
-import com.divya.schoolservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,13 +30,14 @@ public class JwtAuthenticationController {
 
     @Autowired
     @Qualifier("uerServiceImpl")
-    private UserService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @PostMapping("/authenticate")
+    //
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUserName(), authenticationRequest.getPassword());
-        final User user = userDetailsService.getByUsername(authenticationRequest.getUserName());
-        final String token = jwtTokenUtil.generateToken(user);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
+        final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
